@@ -131,12 +131,30 @@
                                         <th>Nome</th>
                                         <th>E-mail</th>
                                         <th>Admin</th>
-                                        <th>Criado em</th>
+                                        <th>Criado</th>
                                         <th>Ações</th>
                                     </tr>
                                 </thead>
                                 <tbody id="table-users">
-
+                                    @foreach ($users as $user)
+                                    <tr>
+                                        <td>
+                                            <img src="{{asset('storage/'.$user->photo) ?? ''}}" alt="User Image"
+                                                class="img-circle img-sm">
+                                        </td>
+                                        <td>{{$user->name}}</td>
+                                        <td>{{$user->email}}</td>
+                                        <td>{{$user->isAdmin ? 'Sim' : 'Não'}}</td>
+                                        <td>{{\Carbon\Carbon::parse($user->created_at ??
+                                            '')->locale('pt')->diffForHumans()}}</td>
+                                        <td>
+                                            <button wire:click="$emit('editUser',{{$user}})" type="button"
+                                                class="btn btn-primary btn-edit btn-xs btn-flat">Editar</button>
+                                            <button wire:click="$emit('delete-user',{{$user}})"  type="button"
+                                                class="btn btn-danger btn-xs btn-flat">Excluir</button>
+                                        </td>
+                                    </tr>
+                                    @endforeach
 
                                 </tbody>
                             </table>
@@ -154,7 +172,7 @@
                             <!-- small box -->
                             <div class="small-box bg-green">
                                 <div class="inner">
-                                    <h3 id="count-users">0</h3>
+                                    <h3 id="count-users">{{$user_qtd}}</h3>
 
                                     <p>Usuários</p>
                                 </div>
@@ -168,7 +186,7 @@
                             <!-- small box -->
                             <div class="small-box bg-yellow">
                                 <div class="inner">
-                                    <h3 id="count-admins">0</h3>
+                                    <h3 id="count-admins">{{$admin_qtd}}</h3>
 
                                     <p>Administradores</p>
                                 </div>
@@ -180,6 +198,7 @@
                         <!-- ./col -->
                     </div>
 
+                    @if(!$isEdit)
                     <div id="box-user-create" class="box box-success">
                         <div class="box-header with-border">
                             <h3 class="box-title">Novo Usuário</h3>
@@ -187,13 +206,13 @@
                         <!-- /.box-header -->
                         @include('utils.messages')
                         <!-- form start -->
-                        <form role="form" id="form-user-create" wire:submit.prevent='store' >
+                        <form role="form" id="form-user-create" wire:submit.prevent='store'>
                             <div class="box-body">
                                 <div class="form-group">
                                     <label for="exampleInputName">Nome</label>
                                     <input wire:model.lazy='name' type="text" class="form-control" id="exampleInputName"
                                         placeholder="Digite o nome do usuário" name="name">
-                                        @error('name') <span class="error">{{ $message }}</span> @enderror
+                                    @error('name') <span class="error">{{ $message }}</span> @enderror
                                 </div>
                                 <div class="form-group">
                                     <label>Gênero</label>
@@ -209,11 +228,13 @@
                                                 id="exampleInputGenderF" name="gender">
                                             Feminino</label>
                                     </div>
+                                    @error('gender') <span class="error">{{ $message }}</span> @enderror
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputBirth">Nascimento</label>
                                     <input wire:model.lazy='birthday' type="date" class="form-control"
                                         id="exampleInputBirth" name="birth">
+                                    @error('birthday') <span class="error">{{ $message }}</span> @enderror
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputCountry">País</label>
@@ -479,20 +500,26 @@
                                         <option value="Zambia">Zambia</option>
                                         <option value="Zimbabwe">Zimbabwe</option>
                                     </select>
+                                    @error('country') <span class="error">{{ $message }}</span> @enderror
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail">E-mail</label>
                                     <input wire:model.lazy='email' type="email" class="form-control"
                                         id="exampleInputEmail" placeholder="Digite o e-mail" name="email">
+                                    @error('email') <span class="error">{{ $message }}</span> @enderror
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputPassword">Senha</label>
                                     <input wire:model.lazy='password' type="password" class="form-control"
                                         id="exampleInputPassword" placeholder="Crie uma senha" name="password">
+                                    @error('password') <span class="error">{{ $message }}</span> @enderror
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputFile">Foto</label>
-                                    <input wire:model.lazy='photo' type="file" id="exampleInputFile" name="photo">
+                                    <input accept="image/*" wire:change="$emit('choose-profile-picture')" type="file"
+                                        type="file" id="exampleInputFile" name="photo">
+                                    @if($photo) <img src="{{$photo}}" class="img-profile img-thumbnail" alt="...">
+                                    @endif
                                 </div>
                                 <div class="checkbox">
                                     <label>
@@ -507,8 +534,10 @@
                             </div>
                         </form>
                     </div>
-
+                    @else
                     @livewire('edit-user')
+                    @endif
+
 
                 </div>
             </div>
