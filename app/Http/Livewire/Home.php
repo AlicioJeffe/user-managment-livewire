@@ -63,6 +63,14 @@ class Home extends Component
         $this->country = $user['country'];
         $this->isAdmin = $user['isAdmin'];
         $this->photo = $user['photo'];
+
+        $this->isEdit = false;
+        $this->dispatchBrowserEvent('erase-form', [
+            'formID' => 'form-user-create',
+        ]);
+        $this->dispatchBrowserEvent('erase-form', [
+            'formID' => 'form-user-update',
+        ]);
     }
 
     public function deleteUserConfirmed()
@@ -70,6 +78,13 @@ class Home extends Component
         $user = User::find($this->userId);
         if ($user->delete()) {
             $this->dispatchBrowserEvent('user-deleted');
+            $this->isEdit = false;
+            $this->dispatchBrowserEvent('erase-form', [
+                'formID' => 'form-user-create',
+            ]);
+            $this->dispatchBrowserEvent('erase-form', [
+                'formID' => 'form-user-update',
+            ]);
         }
     }
 

@@ -313,7 +313,8 @@
                 <label for="exampleInputFile">Foto</label>
                 <input accept="image/*" wire:change="$emit('edit-choose-profile-picture')" type="file" type="file"
                     id="editProfilePhoto" name="photo">
-             <img src=" {{$newPhoto ?? asset('storage/'.$currentPhoto)}}" class="img-profile img-thumbnail" alt="...">
+                <img src=" {{$newPhoto ?? asset('storage/'.$currentPhoto)}}" class="img-profile img-thumbnail"
+                    alt="...">
 
             </div>
             <div class="checkbox">

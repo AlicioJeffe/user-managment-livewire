@@ -139,7 +139,7 @@
                                     @foreach ($users as $user)
                                     <tr>
                                         <td>
-                                            <img src="{{asset('storage/'.$user->photo) ?? ''}}" alt="User Image"
+                                            <img src="@if($user->photo) {{asset('storage/'.$user->photo)}} @else https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Breezeicons-actions-22-im-user.svg/1200px-Breezeicons-actions-22-im-user.svg.png @endif"  alt="User Image"
                                                 class="img-circle img-sm">
                                         </td>
                                         <td>{{$user->name}}</td>
@@ -150,6 +150,7 @@
                                         <td>
                                             <button wire:click="$emit('editUser',{{$user}})" type="button"
                                                 class="btn btn-primary btn-edit btn-xs btn-flat">Editar</button>
+
                                             <button wire:click="$emit('delete-user',{{$user}})"  type="button"
                                                 class="btn btn-danger btn-xs btn-flat">Excluir</button>
                                         </td>

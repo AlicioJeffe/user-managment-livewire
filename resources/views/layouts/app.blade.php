@@ -73,7 +73,9 @@
 
     window.addEventListener('erase-form',({detail : {formID}})=>{
 
-        document.getElementById(formID).reset()
+
+        console.log(document.getElementById(formID))
+      document.getElementById(formID).reset()
     })
 
     Livewire.on('choose-profile-picture',()=>{

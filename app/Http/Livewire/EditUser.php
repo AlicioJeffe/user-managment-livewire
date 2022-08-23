@@ -50,6 +50,18 @@ class EditUser extends Component
         $this->currentPhoto = $user['photo'];
     }
 
+    public function resetValue()
+    {
+        $this->userId = "";
+        $this->name = "";
+        $this->email ="";
+        $this->gender = "";
+        $this->birthday = "";
+        $this->country = "";
+        $this->isAdmin = false;
+        $this->currentPhoto = null;
+    }
+
 
     public function updated($propertyName)
     {
@@ -93,6 +105,9 @@ class EditUser extends Component
                 $this->dispatchBrowserEvent('erase-form', [
                     'formID' => 'form-user-update',
                 ]);
+
+                $this->resetValue();
+
             } else {
                 $this->dispatchBrowserEvent('alert', [
                     'type' => 'error',
